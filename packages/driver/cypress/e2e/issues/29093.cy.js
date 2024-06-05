@@ -1,4 +1,5 @@
-// https://github.com/cypress-io/cypress/issues/29093
+const { getReasonIsHidden } = require('../../../src/dom/visibility')
+
 describe('issue 29093', () => {
   before(() => {
     cy
@@ -6,7 +7,7 @@ describe('issue 29093', () => {
     .visit('/fixtures/issue-29093.html')
   })
 
-  it('can click selection when rem width used', () => {
-    cy.get('#sidebar-left > section').click()
+  it('when display: contents with width in rem used not return 0 width', () => {
+    expect(getReasonIsHidden(cy.$$('#sidebar-left > section')).includes('width'), 'when display: contents with width in rem used not return 0 width').to.be.false
   })
 })

@@ -117,7 +117,7 @@ const isHiddenByAncestors = (el, methodName = 'isHiddenByAncestors()', options =
   return elIsOutOfBoundsOfAncestorsOverflow($el)
 }
 
-const elHasNoEffectiveWidthOrHeight = ($el) => {
+const elHasNoEffectiveWidthOrHeight = ($el): boolean => {
   // Is the element's CSS width OR height, including any borders,
   // padding, and vertical scrollbars (if rendered) less than 0?
   //
@@ -148,7 +148,7 @@ const elHasNoEffectiveWidthOrHeight = ($el) => {
   (el.getClientRects().length <= 0)
 }
 
-const isZeroLengthAndTransformNone = (width, height, transform) => {
+const isZeroLengthAndTransformNone = (width: number, height: number, transform: string): boolean => {
   // From https://github.com/cypress-io/cypress/issues/5974,
   // we learned that when an element has non-'none' transform style value like "translate(0, 0)",
   // it is visible even with `height: 0` or `width: 0`.
@@ -201,6 +201,10 @@ const elHasDisplayNone = ($el) => {
   return $el.css('display') === 'none'
 }
 
+const elHasDisplayContents = ($el) => {
+  return $el.css('display') === 'contents'
+}
+
 const elHasDisplayInline = ($el) => {
   return $el.css('display') === 'inline'
 }
@@ -231,9 +235,19 @@ const canClipContent = function ($el, $ancestor) {
     return false
   }
 
+  // fix for 29093
+  if (elHasDisplayContents($ancestor)) {
+    return false
+  }
+
   // the closest parent with position relative, absolute, or fixed
   const $offsetParent = $el.offsetParent()
   const isClosestAncsestor = isAncestor($ancestor, $offsetParent)
+
+  // // fix for 28638 - when element postion is relative and it's parent absolute
+  if (elHasPositionRelative($el) && isClosestAncsestor && elHasPositionAbsolute($ancestor)) {
+    return false
+  }
 
   // even if ancestors' overflow is clippable, if the element's offset parent
   // is a parent of the ancestor, the ancestor will not clip the element
@@ -321,7 +335,7 @@ const elIsNotElementFromPoint = function ($el) {
   return true
 }
 
-const elIsOutOfBoundsOfAncestorsOverflow = function ($el: JQuery<any>, $ancestor = getParent($el)) {
+const elIsOutOfBoundsOfAncestorsOverflow = function ($el, $ancestor = getParent($el)): boolean {
   // no ancestor, not out of bounds!
   // if we've reached the top parent, which is not a normal DOM el
   // then we're in bounds all the way up, return false
@@ -329,9 +343,9 @@ const elIsOutOfBoundsOfAncestorsOverflow = function ($el: JQuery<any>, $ancestor
     return false
   }
 
-  if (elHasPositionRelative($el) && elHasPositionAbsolute($ancestor)) {
-    return false
-  }
+  // if (elHasPositionRelative($el) && elHasPositionAbsolute($ancestor)) {
+  //   return false
+  // }
 
   if (canClipContent($el, $ancestor)) {
     const ancestorProps = $ancestor.get(0).getBoundingClientRect()
@@ -408,6 +422,11 @@ const parentHasNoClientWidthOrHeightAndOverflowHidden = function ($el) {
     return false
   }
 
+  // fix for 29093
+  if (elHasDisplayContents($el)) {
+    return false
+  }
+
   // if we have overflow hidden and no effective width or height
   if (elHasOverflowHidden($el) && elHasNoEffectiveWidthOrHeight($el)) {
     return $el
@@ -479,7 +498,7 @@ const parentHasOpacityZero = function ($el) {
 }
 
 /* eslint-disable no-cond-assign */
-export const getReasonIsHidden = function ($el, options = { checkOpacity: true }) {
+export const getReasonIsHidden = function ($el: JQuery<any>, options = { checkOpacity: true }) {
   // TODO: need to add in the reason an element
   // is hidden when its fixed position and its
   // either being covered or there is no el

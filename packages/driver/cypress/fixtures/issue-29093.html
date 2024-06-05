@@ -10,26 +10,29 @@
     }
 
     .contents {
-      display: contents
+      display: contents;
     }
 
+    .b-4{
+      width: 0.3em;
+    }
     .overflow-hidden {
       overflow: hidden
     }
 
-    @media (min-width: 1024px) {
+    /* @media (min-width: 1024px) {
       .lg\:grid {
         display: grid
       }
-    }
+    } */
   </style>
 </head>
 
 <body>
   <div class="overflow-hidden contents">
-    <aside id="sidebar-left" class="lg:w-auto">
-      <section class="b-4">
-        <p class="big">IN SECTION</p>
+    <aside id="sidebar-left" class="b-4">
+      <section class="b-4 big">IN SECTION
+        <p class="big">IN PARAGRAPH</p>
       </section>
     </aside>
   </div>
