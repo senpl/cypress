@@ -201,10 +201,6 @@ const elHasDisplayNone = ($el) => {
   return $el.css('display') === 'none'
 }
 
-const elHasDisplayContents = ($el) => {
-  return $el.css('display') === 'contents'
-}
-
 const elHasDisplayInline = ($el) => {
   return $el.css('display') === 'inline'
 }
@@ -235,19 +231,9 @@ const canClipContent = function ($el, $ancestor) {
     return false
   }
 
-  // fix for 29093
-  if (elHasDisplayContents($ancestor)) {
-    return false
-  }
-
   // the closest parent with position relative, absolute, or fixed
   const $offsetParent = $el.offsetParent()
   const isClosestAncsestor = isAncestor($ancestor, $offsetParent)
-
-  // // fix for 28638 - when element postion is relative and it's parent absolute
-  if (elHasPositionRelative($el) && isClosestAncsestor && elHasPositionAbsolute($ancestor)) {
-    return false
-  }
 
   // even if ancestors' overflow is clippable, if the element's offset parent
   // is a parent of the ancestor, the ancestor will not clip the element
@@ -343,10 +329,6 @@ const elIsOutOfBoundsOfAncestorsOverflow = function ($el, $ancestor = getParent(
     return false
   }
 
-  // if (elHasPositionRelative($el) && elHasPositionAbsolute($ancestor)) {
-  //   return false
-  // }
-
   if (canClipContent($el, $ancestor)) {
     const ancestorProps = $ancestor.get(0).getBoundingClientRect()
 
@@ -419,11 +401,6 @@ const elIsHiddenByAncestors = function ($el, checkOpacity, $origEl = $el) {
 const parentHasNoClientWidthOrHeightAndOverflowHidden = function ($el) {
   // if we've walked all the way up to body or html then return false
   if (isUndefinedOrHTMLBodyDoc($el)) {
-    return false
-  }
-
-  // fix for 29093
-  if (elHasDisplayContents($el)) {
     return false
   }
 
