@@ -164,7 +164,7 @@ const isZeroLengthAndOverflowHidden = (width, height, overflowHidden) => {
 }
 
 const elHasNoClientWidthOrHeight = ($el) => {
-  return (elClientWidth($el) <= 0) || (elClientHeight($el) <= 0)
+  return (elClientWidth($el) < 0) || (elClientHeight($el) < 0)
 }
 
 const elementBoundingRect = ($el) => $el[0].getBoundingClientRect()
@@ -341,16 +341,16 @@ const elIsOutOfBoundsOfAncestorsOverflow = function ($el, $ancestor = getParent(
     // target el is out of bounds
     if (
       // target el is to the right of the ancestor's visible area
-      (elProps.left >= (ancestorProps.width + ancestorProps.left)) ||
+      (elProps.left > (ancestorProps.width + ancestorProps.left)) ||
 
       // target el is to the left of the ancestor's visible area
-      ((elProps.left + elProps.width) <= ancestorProps.left) ||
+      ((elProps.left + elProps.width) < ancestorProps.left) ||
 
       // target el is under the ancestor's visible area
-      (elProps.top >= (ancestorProps.height + ancestorProps.top)) ||
+      (elProps.top > (ancestorProps.height + ancestorProps.top)) ||
 
       // target el is above the ancestor's visible area
-      ((elProps.top + elProps.height) <= ancestorProps.top)
+      ((elProps.top + elProps.height) < ancestorProps.top)
     ) {
       return true
     }

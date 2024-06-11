@@ -1,0 +1,86 @@
+cd packages\driver && yarn workspace @packages/runner watch
+yarn workspace @packages/driver cypress:open
+☐ Zrobić fix do display: contents pierwszy
+  ☐ Wysłać
+☐ fix for 28638
+  ☐ Prepare seperate branch with this fix
+  ☐ Remove unrelated parts
+  ☐ add test
+☐ zrobić fix do 
+☐ znaleźć repro dla em/REM
+  ☐ BO taki błąd też był
+    ☐ ok mamy
+    ☐ nie jest to piękne, ale jest
+    znaleźć ładniejszy?
+☐ fix for 0 width that is visible
+  ☐ gdy contents to ignore minimal width
+  ☐ bo jednak taki błąd jest
+    ☐ Mam jakieś repro
+      ☐ Gdy contents to ignorujemy effective width
+      ☐ efective width chyba nie powinno być sprawdzane
+      ☐ napewno test w visibility jeden co upada jest do poprawy
+      ☐ no i nawet gdy nie sprawdzamy width to i tak nie podaje reason
+      ☐ trochę to bez sensu, ale jednak tak jest
+        ☐ więc trzeba by to naprawić
+    ☐ fix that issue
+        ☐ provide check new implementation
+  ☐ Remove unrelated parts
+☐ Fix for display:contents
+  ☐ Prepare seperate branch with this fix
+  ☐ Remove unrelated parts
+
+
+☐ Spróbować poodpowiadać i wysłać poprawki
+☐ Sprawdzić na tych wartościach
+  ☐ 1000 Viewport height 660
+  cd packages\server && yarn workspace @packages/runner watch
+  w configu podmienić na integration, nie command
+  C:\p\dsd\cypressRelated\new\cypress\packages\driver\cypress.config.ts
+  specPattern: 'cypress/integration/**/*.cy.js',
+
+  yarn workspace @packages/server cypress:open
+
+yarn test-integration --scope @packages/server
+
+findByTestIduser-avatar-title
+assertexpected <div.bg-cover.border-[1px].border-gray-200.rounded-[50px].overflow-hidden.h-[24px].w-[24px]> not to exist in the DOM
+cy.findByTestId(headerBarId).within(() => {
+  > 344 |           cy.findByTestId('user-avatar-title').should('not.exist')
+        |                                                ^
+    345 |           cy.findByRole('button', { name: 'Log in' }).click()
+    346 |         })
+    347 |       })
+☐ Spróbować naprawić, bo może to nie jest ciężkie
+☐ Mieć test reproduction
+  jeżeli strona zawiera integrity
+  To nie stosujemy tego co przy modifyObstructiveCode
+    
+☐ Sprawdzić, czy parametr naprawia
+☐ jeśli tak, to dlaczego
+Spróbować bez rzutowania na
+
+☐ yarn workspace @packages/launchpad cypress:open -> Component testing
+☐ Zaraz po tym klikamy Component testing bo tam to jest
+
+☐ przyspieszyć jeszcze testy visibility,
+  ☐ żeby bardziej gładko przechodziły pipeline tests
+☐ Naprawić testy w visibility
+  ☐ po koleji
+    ☐ znaleźć ich przyczynę
+      ☐ is hidden if parent has overflow: hidden and no width
+☐ Spróbować naprawić też ten błąd w 567
+  ☐ Bo kod testu mam przygotowany  
+
+błąd jest w transform.detectVisibility
+☐ Spróbować poprawić błąd z integrity ???
+  ☐ pewnie przez brak Content-Security-Policy headerów
+  ☐ lub niewłąściwą obsługę tych, które są.
+
+
+✔ Create tag @done(24-04-02 14:23)
+  ✔ clean code @done(24-04-02 14:23)
+☐ Sprawdzić gdzie ja używałem force: true przy klikach, bo pewnie nie musiałem, ale coś mi tam pewnie nie działało
+  ☐ Bo w sumie takie poprawki też mógłbym zgłosić
+☐ Sprawdzić co było sednem problemu?
+☐ Spróbować co gdy hidden i grid ?
+  ☐ Bo w sumie tylko łata teraz?
