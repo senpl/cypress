@@ -375,6 +375,11 @@ describe('visual error templates', () => {
         retryingAgain: ['Retrying again...'],
       }
     },
+    FIREFOX_CDP_FAILED_TO_CONNECT: () => {
+      return {
+        default: ['Retrying...'],
+      }
+    },
     TESTS_DID_NOT_START_FAILED: () => {
       return {
         default: [],
@@ -1134,7 +1139,7 @@ describe('visual error templates', () => {
         default: ['spec', '1', 'spec must be a string or comma-separated list'],
       }
     },
-    FIREFOX_MARIONETTE_FAILURE: () => {
+    FIREFOX_GECKODRIVER_FAILURE: () => {
       const err = makeErr()
 
       return {
