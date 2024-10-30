@@ -17,15 +17,13 @@ _Released 12/3/2024 (PENDING)_
 **Bugfixes:**
 
 - The CSS pseudo-class `:dir()` is now supported when testing in Electron. Addresses [#29766](https://github.com/cypress-io/cypress/issues/29766).
+- Fixed an issue where "isVisible" is incorrectly assessed for the absolutely positioned elements if the ancestor has overflow and static position. Fixed in [#29689](https://github.com/cypress-io/cypress/pull/29689).
 
 **Dependency Updates:**
 
 - Upgraded `electron` from `27.3.10` to `32.2.0`. Addresses [#29547](https://github.com/cypress-io/cypress/issues/29547).
 - Upgraded bundled Chromium version from `118.0.5993.159` to `128.0.6613.178`. Addresses [#29547](https://github.com/cypress-io/cypress/issues/29547).
 
-**Bugfixes:**
-
-- Fixed an issue where "isVisible" is incorrectly assessed for the absolutely positioned elements if the ancestor has overflow and static position [#29689](https://github.com/cypress-io/cypress/pull/29689).
 
 ## 13.15.1
 
