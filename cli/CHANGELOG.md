@@ -7,7 +7,7 @@ _Released 12/3/2024 (PENDING)_
 
 **Bugfixes:**
 
-- Fixed an issue where overflow: clip in parent html node make child node visibility not correctly detected. Fixes [#23852](https://github.com/cypress-io/cypress/issues/23852). Fixed in [#29778](https://github.com/cypress-io/cypress/pull/29778).
+- Fixed an issue where overflow: clip in parent html node make child node visibility not correctly detected. Fixed in [#29778](https://github.com/cypress-io/cypress/pull/29778). Fixes [#23852](https://github.com/cypress-io/cypress/issues/23852).
 - Removed support for Node.js 16 and Node.js 21. Addresses [#29930](https://github.com/cypress-io/cypress/issues/29930).
 - Prebuilt binaries for Linux are no longer compatible with Linux distributions based on glibc <2.28, for example: Ubuntu 14-18, RHEL 7, CentOS 7, Amazon Linux 2. Addresses [#29601](https://github.com/cypress-io/cypress/issues/29601).
 - The `experimentalFetchPolyfill` configuration option was removed. This option was deprecated in Cypress 6.0.0. We recommend using `cy.intercept()` for handling fetch requests. Addressed in [#30466](https://github.com/cypress-io/cypress/pull/30466).
