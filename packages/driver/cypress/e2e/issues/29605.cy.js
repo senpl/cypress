@@ -1,13 +1,10 @@
-// https://github.com/cypress-io/cypress/issues/29093
+// https://github.com/cypress-io/cypress/issues/29605
 describe('issue #29605', () => {
   before(() => {
-    cy
-    .viewport('macbook-16')
-    .visit('/fixtures/issue-29605.html')
+    cy.visit('/fixtures/issue-29605.html')
   })
 
-  it('can click selection when display: contents width used', () => {
-    // cy.
+  it('evaluates element with display: contents width as visible', () => {
     cy.get('#child').should('be.visible')
   })
 })
