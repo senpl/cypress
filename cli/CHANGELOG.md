@@ -5,9 +5,6 @@ _Released 12/3/2024 (PENDING)_
 
 **Breaking Changes:**
 
-**Bugfixes:**
-
-- Fixed an issue where Cypress incorrectly uses the box model of elements that have display:contents when determining visibility of child elements. Fixed in [#29680](https://github.com/cypress-io/cypress/pull/29680).Fixes [#29605](https://github.com/cypress-io/cypress/issues/29605).
 - Removed support for Node.js 16 and Node.js 21. Addresses [#29930](https://github.com/cypress-io/cypress/issues/29930).
 - Prebuilt binaries for Linux are no longer compatible with Linux distributions based on glibc <2.28, for example: Ubuntu 14-18, RHEL 7, CentOS 7, Amazon Linux 2. Addresses [#29601](https://github.com/cypress-io/cypress/issues/29601).
 - Cypress now only officially supports the latest 3 major versions of Chrome, Firefox, and Edge - older browser versions may still work, but we recommend keeping your browsers up to date to ensure compatibility with Cypress. A warning will no longer be displayed on browser selection in the Launchpad for any 'unsupported' browser versions. Additionally, the undocumented `minSupportedVersion` property has been removed from `Cypress.browser`. Addressed in [#30462](https://github.com/cypress-io/cypress/pull/30462).
@@ -22,6 +19,7 @@ _Released 12/3/2024 (PENDING)_
 
 **Bugfixes:**
 
+- Elements with `display: contents` will no longer use box model calculations for visibility, and correctly show as visible when it is visible. Fixed in [#29680](https://github.com/cypress-io/cypress/pull/29680). Fixes [#29605](https://github.com/cypress-io/cypress/issues/29605).
 - The CSS pseudo-class `:dir()` is now supported when testing in Electron. Addresses [#29766](https://github.com/cypress-io/cypress/issues/29766).
 
 **Dependency Updates:**
