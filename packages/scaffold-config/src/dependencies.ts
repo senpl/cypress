@@ -7,15 +7,6 @@ export const WIZARD_DEPENDENCY_WEBPACK = {
   minVersion: '^4.0.0 || ^5.0.0',
 } as const
 
-export const WIZARD_DEPENDENCY_VUE_2 = {
-  type: 'vue',
-  name: 'Vue.js 2',
-  package: 'vue',
-  installer: 'vue@2',
-  description: 'The Progressive JavaScript Framework',
-  minVersion: '^2.0.0',
-} as const
-
 export const WIZARD_DEPENDENCY_VUE_3 = {
   type: 'vue',
   name: 'Vue.js 3',
@@ -85,7 +76,7 @@ export const WIZARD_DEPENDENCY_NEXT = {
   package: 'next',
   installer: 'next',
   description: 'The React Framework for Production',
-  minVersion: '^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0',
+  minVersion: '^14.0.0',
 } as const
 
 export const WIZARD_DEPENDENCY_ANGULAR_CLI = {
@@ -151,7 +142,6 @@ export const WIZARD_DEPENDENCIES = [
   WIZARD_DEPENDENCY_NEXT,
   WIZARD_DEPENDENCY_REACT,
   WIZARD_DEPENDENCY_REACT_DOM,
-  WIZARD_DEPENDENCY_VUE_2,
   WIZARD_DEPENDENCY_VUE_3,
   WIZARD_DEPENDENCY_ANGULAR_CLI,
   WIZARD_DEPENDENCY_ANGULAR_DEVKIT_BUILD_ANGULAR,
@@ -227,7 +217,6 @@ const testingDependenciesOfInterest = [
   '@playwright/experimental-ct-react',
   '@playwright/experimental-ct-svelte',
   '@playwright/experimental-ct-vue',
-  '@playwright/experimental-ct-vue2',
   '@playwright/experimental-ct-solid',
   '@playwright/experimental-ct-react17',
   'axe-core',

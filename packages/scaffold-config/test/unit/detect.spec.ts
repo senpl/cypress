@@ -98,20 +98,6 @@ describe('detectFramework', () => {
     expect(actual.bundler).to.eq('webpack')
   })
 
-  it(`Vue CLI w/ Vue 2`, async () => {
-    const projectPath = await scaffoldMigrationProject('vueclivue2-unconfigured')
-
-    fakeDepsInNodeModules(projectPath, [
-      { devDependency: '@vue/cli-service', version: '5.0.0' },
-      { dependency: 'vue', version: '2.5.0' },
-    ])
-
-    const actual = await detectFramework(projectPath, resolvedCtFrameworks)
-
-    expect(actual.framework?.type).to.eq('vueclivue2')
-    expect(actual.bundler).to.eq('webpack')
-  })
-
   it(`Vue CLI 5 w/ Vue 3`, async () => {
     const projectPath = await scaffoldMigrationProject('vuecli5vue3-unconfigured')
 
@@ -168,7 +154,8 @@ describe('detectFramework', () => {
     expect(actual.bundler).to.eq('vite')
   })
 
-  ;['10.0.0', '11.0.0', '12.0.0', '13.0.0', '14.0.0'].forEach((v) => {
+  // keeping array style as to make it easier to support future next versions
+  ;['14.0.0'].forEach((v) => {
     it(`Next.js v${v}`, async () => {
       const projectPath = await scaffoldMigrationProject('nextjs-unconfigured')
 
