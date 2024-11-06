@@ -30,22 +30,6 @@ describe('packagesToInstall', () => {
     expect(actual).to.eq(`npm install -D react-scripts react-dom react`)
   })
 
-  it('vueclivue2-unconfigured', async () => {
-    const ctx = createTestDataContext()
-
-    const projectPath = await scaffoldMigrationProject('vueclivue2-unconfigured')
-
-    ctx.update((coreData) => {
-      coreData.currentProject = projectPath
-      coreData.wizard.chosenFramework = findFramework('vueclivue2')
-      coreData.wizard.chosenBundler = findBundler('webpack')
-    })
-
-    const actual = await ctx.wizard.installDependenciesCommand()
-
-    expect(actual).to.eq(`npm install -D @vue/cli-service vue@2`)
-  })
-
   it('vueclivue3-unconfigured', async () => {
     const ctx = createTestDataContext()
 
@@ -124,22 +108,6 @@ describe('packagesToInstall', () => {
     const actual = await ctx.wizard.installDependenciesCommand()
 
     expect(actual).to.eq(`npm install -D next react react-dom`)
-  })
-
-  it('nuxtjs-vue2-unconfigured', async () => {
-    const ctx = createTestDataContext()
-
-    const projectPath = await scaffoldMigrationProject('nuxtjs-vue2-unconfigured')
-
-    ctx.update((coreData) => {
-      coreData.currentProject = projectPath
-      coreData.wizard.chosenFramework = findFramework('nuxtjs')
-      coreData.wizard.chosenBundler = findBundler('webpack')
-    })
-
-    const actual = await ctx.wizard.installDependenciesCommand()
-
-    expect(actual).to.eq('npm install -D nuxt@2 vue@2')
   })
 
   it('framework and bundler are undefined', async () => {

@@ -75,19 +75,10 @@ export function fakeDepsInNodeModules (cwd: string, deps: Array<DepToFake | DevD
 const resolvedCtFrameworks = CT_FRAMEWORKS.map((x) => resolveComponentFrameworkDefinition(x))
 
 describe('detectFramework', () => {
-  it('Create React App v4', async () => {
-    const projectPath = await scaffoldMigrationProject('create-react-app-unconfigured')
-
-    fakeDepsInNodeModules(projectPath, [{ dependency: 'react-scripts', version: '5.0.0' }])
-    const actual = await detectFramework(projectPath, resolvedCtFrameworks)
-
-    expect(actual.framework?.type).to.eq('reactscripts')
-  })
-
   it('Create React App v5', async () => {
     const projectPath = await scaffoldMigrationProject('create-react-app-unconfigured')
 
-    fakeDepsInNodeModules(projectPath, [{ dependency: 'react-scripts', version: '4.0.0' }])
+    fakeDepsInNodeModules(projectPath, [{ dependency: 'react-scripts', version: '5.0.0' }])
     const actual = await detectFramework(projectPath, resolvedCtFrameworks)
 
     expect(actual.framework?.type).to.eq('reactscripts')
@@ -104,20 +95,6 @@ describe('detectFramework', () => {
     const actual = await detectFramework(projectPath, resolvedCtFrameworks)
 
     expect(actual.framework?.type).to.eq('react')
-    expect(actual.bundler).to.eq('webpack')
-  })
-
-  it(`Vue CLI w/ Vue 2`, async () => {
-    const projectPath = await scaffoldMigrationProject('vueclivue2-unconfigured')
-
-    fakeDepsInNodeModules(projectPath, [
-      { devDependency: '@vue/cli-service', version: '4.0.0' },
-      { dependency: 'vue', version: '2.5.0' },
-    ])
-
-    const actual = await detectFramework(projectPath, resolvedCtFrameworks)
-
-    expect(actual.framework?.type).to.eq('vueclivue2')
     expect(actual.bundler).to.eq('webpack')
   })
 
@@ -153,22 +130,8 @@ describe('detectFramework', () => {
     const projectPath = await scaffoldMigrationProject('react-vite-ts-unconfigured')
 
     fakeDepsInNodeModules(projectPath, [
-      { devDependency: 'vite', version: '2.0.0' },
-      { dependency: 'react', version: '17.0.0' },
-    ])
-
-    const actual = await detectFramework(projectPath, resolvedCtFrameworks)
-
-    expect(actual.framework?.type).to.eq('react')
-    expect(actual.bundler).to.eq('vite')
-  })
-
-  it(`React with Vite using pre-release version`, async () => {
-    const projectPath = await scaffoldMigrationProject('react-vite-ts-unconfigured')
-
-    fakeDepsInNodeModules(projectPath, [
-      { devDependency: 'vite', version: '2.5.0-alpha.4' },
-      { dependency: 'react', version: '17.0.0' },
+      { devDependency: 'vite', version: '5.0.0' },
+      { dependency: 'react', version: '18.0.0' },
     ])
 
     const actual = await detectFramework(projectPath, resolvedCtFrameworks)
@@ -181,7 +144,7 @@ describe('detectFramework', () => {
     const projectPath = await scaffoldMigrationProject('vue3-vite-ts-unconfigured')
 
     fakeDepsInNodeModules(projectPath, [
-      { devDependency: 'vite', version: '2.0.0' },
+      { devDependency: 'vite', version: '5.0.0' },
       { dependency: 'vue', version: '3.0.0' },
     ])
 
@@ -191,7 +154,8 @@ describe('detectFramework', () => {
     expect(actual.bundler).to.eq('vite')
   })
 
-  ;['10.0.0', '11.0.0', '12.0.0', '13.0.0', '14.0.0'].forEach((v) => {
+  // keeping array style as to make it easier to support future next versions
+  ;['14.0.0'].forEach((v) => {
     it(`Next.js v${v}`, async () => {
       const projectPath = await scaffoldMigrationProject('nextjs-unconfigured')
 
@@ -222,7 +186,7 @@ describe('detectFramework', () => {
     })
   })
 
-  ;['2.0.0', '3.0.0'].forEach((v) => {
+  ;['4.0.0', '5.0.0'].forEach((v) => {
     it(`Svelte and Vite v${v}`, async () => {
       const projectPath = await scaffoldMigrationProject('svelte-vite-unconfigured')
 
