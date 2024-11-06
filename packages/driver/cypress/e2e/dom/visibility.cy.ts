@@ -174,8 +174,10 @@ describe('src/cypress/dom/visibility', () => {
       this.$parentVisHidden = add('<div class="invis" style="visibility: hidden;"><button>parent visibility: hidden</button></div>')
       this.$displayNone = add('<button style="display: none">display: none</button>')
       this.$inputHidden = add('<input type="hidden" value="abcdef">')
-      this.$divNoWidth = add('<div id="divNoWidth" style="width: 0; height: 100px;">width: 0</div>')
-      this.$divNoHeight = add('<div style="width: 50px; height: 0px;">height: 0</div>')
+      this.$divNoWidth = add('<div id="divNoWidth" style="width: 0; height: 100px;"></div>')
+      this.$divNoHeight = add('<div id="divNoHeight" style="width: 50px; height: 0px;"></div>')
+      this.$divNoWidthTextContent = add('<div id="divNoWidthTestContent" style="width: 0; height: 100px;">width: 0</div>')
+      this.$divNoHeightTextContent = add('<div id="divNoHeightTestContent" style="width: 50px; height: 0px;">height: 0</div>')
       this.$divDetached = $('<div>foo</div>')
       this.$divVisible = add(`<div>visible</div>`)
 
@@ -350,7 +352,7 @@ describe('src/cypress/dom/visibility', () => {
 
       this.$parentPointerEventsNone = add(`\
 <div style="pointer-events: none">
-  <span style="position: fixed; left: 0; top: 50%;">parent pointer-events: none</span>
+  <span style="position: fixed; right: 0; top: 75%;">parent pointer-events: none</span>
 </div>\
 `)
 
@@ -687,7 +689,6 @@ describe('src/cypress/dom/visibility', () => {
         cy.wrap(this.$optionHiddenInSelect.find('#hidden-opt')).should('not.be.visible')
       })
 
-      // TODO(webkit): fix+unskip
       it('follows regular visibility logic if option outside of select', { browser: '!webkit' }, function () {
         expect(this.$optionOutsideSelect.find('#option-hidden').is(':hidden')).to.be.true
         expect(this.$optionOutsideSelect.find('#option-hidden')).to.be.hidden
@@ -736,15 +737,48 @@ describe('src/cypress/dom/visibility', () => {
     })
 
     describe('width and height', () => {
-      it('is visible even if offsetWidth is 0', function () {
-        expect(this.$divNoWidth.is(':hidden')).to.be.false
-        expect(this.$divNoWidth.is(':visible')).to.be.true
+      it('is visible when el.textContent, even if offsetWidth is 0', function () {
+        expect(this.$divNoWidthTextContent.is(':hidden')).to.be.false
+        expect(this.$divNoWidthTextContent.is(':visible')).to.be.true
 
-        expect(this.$divNoWidth).to.not.be.hidden
-        expect(this.$divNoWidth).to.be.visible
+        expect(this.$divNoWidthTextContent).to.not.be.hidden
+        expect(this.$divNoWidthTextContent).to.be.visible
 
-        cy.wrap(this.$divNoWidth).should('be.not.hidden')
-        cy.wrap(this.$divNoWidth).should('be.visible')
+        cy.wrap(this.$divNoWidthTextContent).should('be.not.hidden')
+        cy.wrap(this.$divNoWidthTextContent).should('be.visible')
+      })
+
+      it('is visible when el.textContent, even if offsetHeight is 0', function () {
+        expect(this.$divNoHeightTextContent.is(':hidden')).to.be.false
+        expect(this.$divNoHeightTextContent.is(':visible')).to.be.true
+
+        expect(this.$divNoHeightTextContent).to.not.be.hidden
+        expect(this.$divNoHeightTextContent).to.be.visible
+
+        cy.wrap(this.$divNoHeightTextContent).should('be.not.hidden')
+        cy.wrap(this.$divNoHeightTextContent).should('be.visible')
+      })
+
+      it('is hidden when no el.textContent with offsetHeight is 0', function () {
+        expect(this.$divNoHeight.is(':hidden')).to.be.true
+        expect(this.$divNoHeight.is(':visible')).to.be.false
+
+        expect(this.$divNoHeight).to.be.hidden
+        expect(this.$divNoHeight).to.not.be.visible
+
+        cy.wrap(this.$divNoHeight).should('be.hidden')
+        cy.wrap(this.$divNoHeight).should('not.be.visible')
+      })
+
+      it('is hidden when no el.textContent with offsetWidth is 0', function () {
+        expect(this.$divNoWidth.is(':hidden')).to.be.true
+        expect(this.$divNoWidth.is(':visible')).to.be.false
+
+        expect(this.$divNoWidth).to.be.hidden
+        expect(this.$divNoWidth).to.not.be.visible
+
+        cy.wrap(this.$divNoWidth).should('be.hidden')
+        cy.wrap(this.$divNoWidth).should('not.be.visible')
       })
 
       it('is hidden if parent has overflow: hidden and no width', function () {
@@ -1176,7 +1210,7 @@ describe('src/cypress/dom/visibility', () => {
       })
 
       it('has effective zero height', function () {
-        this.reasonIs(this.$divNoHeight, 'This element `<div>` is not visible because it has an effective width and height of: `50 x 0` pixels.')
+        this.reasonIs(this.$divNoHeight, 'This element `<div#divNoHeight>` is not visible because it has an effective width and height of: `50 x 0` pixels.')
       })
 
       it('has a parent with an effective zero width and overflow: hidden', function () {

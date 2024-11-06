@@ -30,39 +30,54 @@ const isHidden = (el, methodName = 'isHidden()', options = { checkOpacity: true 
   return isHiddenByAncestors(el, methodName, options)
 }
 
+const hasExplicitNonVisibleProps = ($el, options) => {
+  // additionally if the effective visibility of the element
+  // is hidden (which includes any parent nodes) then the user
+  // cannot interact with this element and thus it is hidden
+  if (elHasVisibilityHiddenOrCollapse($el)) {
+    return true // is hidden
+  }
+
+  // when an element is scaled to 0 in one axis
+  // it is not visible to users.
+  if ($transform.detectVisibility($el) !== 'visible') {
+    return true // is hidden
+  }
+
+  // a transparent element is hidden
+  if (elHasOpacityZero($el) && options.checkOpacity) {
+    return true // is hidden
+  }
+
+  return false
+}
+
+const isOptionHidden = (el, methodName, options, recurse) => {
+  const $el = $jquery.wrap(el)
+
+  // they could have just set to hide the option
+  if (elHasDisplayNone($el)) {
+    return true
+  }
+
+  // an option is considered visible if its parent select is visible
+  // if its parent select is visible, then it's not hidden
+  const $select = getFirstParentWithTagName($el, 'select')
+
+  // check $select.length here first
+  // they may have not put the option into a select el,
+  // in which case it will fall through to regular visibility logic
+  if ($select && $select.length && !isStrictlyHidden($select)) {
+    return false
+  }
+
+  return isStrictlyHidden($el, methodName, options)
+}
+
 const ensureEl = (el, methodName) => {
   if (!isElement(el)) {
     throw new Error(`\`Cypress.dom.${methodName}\` failed because it requires a DOM element. The subject received was: \`${el}\``)
   }
-}
-
-const checkIsOptionVisible = (el) => {
-  // an option is considered visible if its parent select is visible
-  if (isOption(el) || isOptgroup(el)) {
-    const $el = $jquery.wrap(el)
-
-    if (elHasDisplayNone($el)) {
-      return 2
-    }
-
-    // if its parent select is visible, then it's not hidden
-    const $select = getFirstParentWithTagName($el, 'select')
-
-    if ($select && $select.length) {
-      // if the select is hidden, the options in it are not visible too
-      if (isStrictlyHidden($select)) {
-        return 2 //this signal not visible
-      }
-    } else {
-      if (isStrictlyHidden($el)) {
-        return 2
-      }
-    }
-
-    return true //this signal visible
-  }
-
-  return 0 //this signal not option element
 }
 
 const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { checkOpacity: true }, recurse?) => {
@@ -74,14 +89,8 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
     return false // is visible
   }
 
-  const optionIsVisible = checkIsOptionVisible(el)
-
-  if (optionIsVisible === true) {
-    return false
-  }
-
-  if (optionIsVisible > 1) {
-    return true
+  if (isOption(el) || isOptgroup(el)) {
+    return isOptionHidden(el, methodName, options, recurse)
   }
 
   if (elHasDisplayNone($el)) {
@@ -97,50 +106,18 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
       return !elHasVisibleChild($el)
     }
 
+    // the presence of text content should make the element visible
+    // since you can see the text with your eyes
+    // unless it is explicitly hidden in some way
     if (el.textContent) {
-      //this below should be in function
-      if (elHasVisibilityHiddenOrCollapse($el)) {
-        return true // is hidden
-      }
-
-      // when an element is scaled to 0 in one axis
-      // it is not visible to users.
-      // So, it is hidden.
-      if ($transform.detectVisibility($el) !== 'visible') {
-        return true
-      }
-
-      // a transparent element is hidden
-      if (elHasOpacityZero($el) && options.checkOpacity) {
-        return true
-      }
-
-      return false
+      // this below should be in function
+      return hasExplicitNonVisibleProps($el, options)
     }
 
     return true
   }
 
-  // additionally if the effective visibility of the element
-  // is hidden (which includes any parent nodes) then the user
-  // cannot interact with this element and thus it is hidden
-  if (elHasVisibilityHiddenOrCollapse($el)) {
-    return true // is hidden
-  }
-
-  // when an element is scaled to 0 in one axis
-  // it is not visible to users.
-  // So, it is hidden.
-  if ($transform.detectVisibility($el) !== 'visible') {
-    return true
-  }
-
-  // a transparent element is hidden
-  if (elHasOpacityZero($el) && options.checkOpacity) {
-    return true
-  }
-
-  return false
+  return hasExplicitNonVisibleProps($el, options)
 }
 
 const isHiddenByAncestors = (el, methodName = 'isHiddenByAncestors()', options = { checkOpacity: true }) => {
