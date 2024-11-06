@@ -37,7 +37,7 @@ export interface SourcedWebpackDevServer extends SourcedDependency {
   module: {
     new (...args: unknown[]): unknown
   }
-  majorVersion: 3 | 4 | 5
+  majorVersion: 4 | 5
 }
 
 export interface SourcedHtmlWebpackPlugin extends SourcedDependency {
@@ -68,7 +68,6 @@ type FrameworkWebpackMapper = { [Property in Frameworks]: string | undefined }
 const frameworkWebpackMapper: FrameworkWebpackMapper = {
   'create-react-app': 'react-scripts',
   'vue-cli': '@vue/cli-service',
-  'nuxt': '@nuxt/webpack',
   react: undefined,
   vue: undefined,
   next: 'next',
@@ -214,7 +213,7 @@ export function sourceWebpackDevServer (config: WebpackDevServerConfig, webpackM
   webpackDevServer.importPath = path.dirname(webpackDevServerJsonPath)
   webpackDevServer.packageJson = require(webpackDevServerJsonPath)
   webpackDevServer.module = require(webpackDevServer.importPath)
-  webpackDevServer.majorVersion = getMajorVersion(webpackDevServer.packageJson, [3, 4, 5])
+  webpackDevServer.majorVersion = getMajorVersion(webpackDevServer.packageJson, [4, 5])
 
   debug('WebpackDevServer: Successfully sourced webpack-dev-server - %o', webpackDevServer)
   if (webpackMajorVersion < 5 && webpackDevServer.majorVersion === 5) {
