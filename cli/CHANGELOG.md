@@ -20,6 +20,8 @@ _Released 12/3/2024 (PENDING)_
 - Cypress Component Testing no longer supports `Nuxt.js` version 2. Addresses [#30468](https://github.com/cypress-io/cypress/issues/30468).
 - Cypress Component Testing no longer supports `Vue` version 2. Addresses [#30295](https://github.com/cypress-io/cypress/issues/30295).
 - Cypress Component Testing no longer supports `Next.js` versions 10, 11, 12, and 13. Addresses [#29583](https://github.com/cypress-io/cypress/issues/29583).
+- Cypress Component Testing no longer supports `Angular` versions 13, 14, 15, and 16. The minimum supported version is now `17.2.0` in order to fully support Angular [signals](https://angular.dev/guide/signals). Addresses [#29582](https://github.com/cypress-io/cypress/issues/29582). Addressed in [#30539](https://github.com/cypress-io/cypress/pull/30539).
+- The `cypress/angular-signals` test harness is no longer included in the Cypress binary. Instead, signals support is now shipped with `cypress/angular`! This requires `rxjs` to be installed as a `peerDependency`. Addresses [#29606](https://github.com/cypress-io/cypress/issues/29606).
 
 **Deprecations:**
 
@@ -41,7 +43,11 @@ in this [GitHub issue](https://github.com/cypress-io/cypress/issues/30447). Addr
 
 ## 13.15.2
 
-_Released 11/5/2024 (PENDING)_
+_Released 11/5/2024_
+
+**Bugfixes:**
+
+- Fixed an issue where the Cypress runner could hang in `after` or `afterEach` hooks that run Cypress commands after a page load timeout error occurs. Addresses [#30238](https://github.com/cypress-io/cypress/issues/30238).
 
 **Misc:**
 
@@ -49,6 +55,8 @@ _Released 11/5/2024 (PENDING)_
 
 **Dependency Updates:**
 
+- Updated `react` from `16.8.6` to `17.0.2` and `react-dom` from `16.8.6` to `17.0.2`. Addresses [#30510](https://github.com/cypress-io/cypress/issues/30510).
+- Updated `mobx` from `5.15.4` to `6.13.5` and `mobx-react` from `6.1.8` to `9.1.1`. Addresses [#30509](https://github.com/cypress-io/cypress/issues/30509).
 - Updated `@cypress/request` from `3.0.4` to `3.0.6`. Addressed in [#30488](https://github.com/cypress-io/cypress/pull/30488).
 
 
