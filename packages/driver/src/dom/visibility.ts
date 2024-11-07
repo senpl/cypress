@@ -8,6 +8,7 @@ import * as $transform from './transform'
 const { isElement, isBody, isHTML, isOption, isOptgroup, getParent, getFirstParentWithTagName, isAncestor, isChild, getAllParents, isDescendent, isUndefinedOrHTMLBodyDoc, elOrAncestorIsFixedOrSticky, isDetached, isFocusable, stringify: stringifyElement } = $elements
 
 const fixedOrAbsoluteRe = /(fixed|absolute)/
+const whitespaceRegex = /\s/g
 
 const OVERFLOW_PROPS = ['hidden', 'scroll', 'auto']
 
@@ -106,11 +107,11 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
       return !elHasVisibleChild($el)
     }
 
-    // the presence of text content should make the element visible
+    // the presence of text content that is not just
+    // spaces or newlines should make the element visible
     // since you can see the text with your eyes
-    // unless it is explicitly hidden in some way
-    if (el.textContent) {
-      // this below should be in function
+    if (el.textContent.replace(whitespaceRegex, '')) {
+      // unless it is explicitly hidden in some way
       return hasExplicitNonVisibleProps($el, options)
     }
 
