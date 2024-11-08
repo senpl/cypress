@@ -110,7 +110,7 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
     // the presence of text content that is not just
     // spaces or newlines should make the element visible
     // since you can see the text with your eyes
-    if (el.textContent.replace(whitespaceRegex, '')) {
+    if (el.textContent?.replace(whitespaceRegex, '')) {
       // unless it is explicitly hidden in some way
       return hasExplicitNonVisibleProps($el, options)
     }
