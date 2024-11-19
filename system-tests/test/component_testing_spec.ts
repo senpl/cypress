@@ -3,18 +3,18 @@ import systemTests from '../lib/system-tests'
 describe('component testing projects', function () {
   systemTests.setup()
 
-  systemTests.it('vueclivue3-configured', {
-    project: 'vueclivue3-configured',
-    testingType: 'component',
-    spec: 'src/components/HelloWorld.cy.js',
-    browser: 'chrome',
-    expectedExitCode: 0,
-  })
-
   systemTests.it('react-vite-ts-configured', {
     project: 'react-vite-ts-configured',
     testingType: 'component',
     spec: 'src/App.cy.tsx',
+    browser: 'chrome',
+    expectedExitCode: 0,
+  })
+
+  systemTests.it('vue3-webpack-ts-configured', {
+    project: 'vue3-webpack-ts-configured',
+    testingType: 'component',
+    spec: 'src/components/HelloWorld.cy.ts',
     browser: 'chrome',
     expectedExitCode: 0,
   })
@@ -34,25 +34,10 @@ describe('component testing projects', function () {
     browser: 'chrome',
     expectedExitCode: 0,
   })
-
-  systemTests.it('issue-25951-next-app', {
-    project: 'issue-25951-next-app',
-    testingType: 'component',
-    spec: 'src/pages/_app.cy.tsx',
-    browser: 'chrome',
-    expectedExitCode: 0,
-  })
-
-  systemTests.it('vuecli5vue3-configured', {
-    project: 'vuecli5vue3-configured',
-    testingType: 'component',
-    spec: 'src/components/HelloWorld.cy.js',
-    browser: 'chrome',
-    expectedExitCode: 0,
-  })
 })
 
-const REACT_MAJOR_VERSIONS = ['17', '18'] as const
+// keeping structure as to adapt to future versions of react
+const REACT_MAJOR_VERSIONS = ['18'] as const
 
 describe(`React major versions with Vite`, function () {
   systemTests.setup()
@@ -62,7 +47,7 @@ describe(`React major versions with Vite`, function () {
       return systemTests.exec(this, {
         project: `react${majorVersion}`,
         configFile: 'cypress-vite-default.config.ts',
-        spec: 'src/App.cy.jsx,src/Unmount.cy.jsx,src/UsingLegacyMount.cy.jsx,src/Rerendering.cy.jsx,src/mount.cy.jsx',
+        spec: 'src/App.cy.jsx,src/Unmount.cy.jsx,src/Rerendering.cy.jsx,src/mount.cy.jsx',
         testingType: 'component',
         browser: 'chrome',
         snapshot: true,
@@ -80,7 +65,7 @@ describe(`React major versions with Webpack`, function () {
       return systemTests.exec(this, {
         project: `react${majorVersion}`,
         configFile: 'cypress-webpack.config.ts',
-        spec: 'src/App.cy.jsx,src/Unmount.cy.jsx,src/UsingLegacyMount.cy.jsx,src/Rerendering.cy.jsx,src/mount.cy.jsx',
+        spec: 'src/App.cy.jsx,src/Unmount.cy.jsx,src/Rerendering.cy.jsx,src/mount.cy.jsx',
         testingType: 'component',
         browser: 'chrome',
         snapshot: true,
@@ -127,7 +112,7 @@ describe('svelte component testing', () => {
 
   for (const bundler of ['webpack', 'vite']) {
     systemTests.it(`svelte + ${bundler}`, {
-      project: `svelte-${bundler}`,
+      project: `svelte-${bundler}-configured`,
       testingType: 'component',
       spec: '**/*.cy.js,!src/errors.cy.js',
       browser: 'chrome',

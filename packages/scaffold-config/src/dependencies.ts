@@ -22,7 +22,7 @@ export const WIZARD_DEPENDENCY_REACT = {
   package: 'react',
   installer: 'react',
   description: 'A JavaScript library for building user interfaces',
-  minVersion: '^16.0.0 || ^17.0.0 || ^18.0.0',
+  minVersion: '^18.0.0',
 } as const
 
 export const WIZARD_DEPENDENCY_REACT_DOM = {
@@ -31,7 +31,7 @@ export const WIZARD_DEPENDENCY_REACT_DOM = {
   package: 'react-dom',
   installer: 'react-dom',
   description: 'This package serves as the entry point to the DOM and server renderers for React',
-  minVersion: '^16.0.0 || ^17.0.0 || ^18.0.0',
+  minVersion: '^18.0.0',
 } as const
 
 export const WIZARD_DEPENDENCY_TYPESCRIPT = {
@@ -40,16 +40,7 @@ export const WIZARD_DEPENDENCY_TYPESCRIPT = {
   package: 'typescript',
   installer: 'typescript',
   description: 'TypeScript is a language for application-scale JavaScript',
-  minVersion: '^3.4.0 || ^4.0.0 || ^5.0.0',
-} as const
-
-export const WIZARD_DEPENDENCY_VUE_CLI_SERVICE = {
-  type: 'vuecliservice',
-  name: 'Vue CLI',
-  package: '@vue/cli-service',
-  installer: '@vue/cli-service',
-  description: 'Standard Tooling for Vue.js Development',
-  minVersion: '^5.0.0',
+  minVersion: '^4.0.0 || ^5.0.0',
 } as const
 
 export const WIZARD_DEPENDENCY_VITE = {
@@ -121,13 +112,12 @@ export const WIZARD_DEPENDENCY_SVELTE: Cypress.CypressComponentDependency = {
   package: 'svelte',
   installer: 'svelte',
   description: 'Cybernetically enhanced web apps',
-  minVersion: '^3.0.0 || ^4.0.0',
+  minVersion: '^4.0.0',
 } as const
 
 export const WIZARD_DEPENDENCIES = [
   WIZARD_DEPENDENCY_WEBPACK,
   WIZARD_DEPENDENCY_TYPESCRIPT,
-  WIZARD_DEPENDENCY_VUE_CLI_SERVICE,
   WIZARD_DEPENDENCY_VITE,
   WIZARD_DEPENDENCY_NEXT,
   WIZARD_DEPENDENCY_REACT,

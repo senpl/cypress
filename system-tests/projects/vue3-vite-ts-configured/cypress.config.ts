@@ -4,7 +4,7 @@ export default defineConfig({
   component: {
     experimentalSingleTabRunMode: true,
     devServer: {
-      framework: 'react',
+      framework: 'vue',
       bundler: 'vite',
     },
   },
