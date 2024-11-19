@@ -9,7 +9,7 @@ const { isElement, isBody, isHTML, isOption, isOptgroup, getParent, getFirstPare
 
 const fixedOrAbsoluteRe = /(fixed|absolute)/
 
-const OVERFLOW_PROPS = ['hidden', 'scroll', 'auto']
+const OVERFLOW_PROPS = ['hidden', 'clip', 'scroll', 'auto']
 
 const isVisible = (el) => {
   return !isHidden(el, 'isVisible()')
@@ -199,12 +199,6 @@ const elHasDisplayNone = ($el) => {
 
 const elHasDisplayInline = ($el) => {
   return $el.css('display') === 'inline'
-}
-
-const elHasOverflowClip = function ($el) {
-  const cssOverflow = [$el.css('overflow'), $el.css('overflow-y'), $el.css('overflow-x')]
-
-  return cssOverflow.includes('clip')
 }
 
 const elHasOverflowHidden = function ($el) {
@@ -401,7 +395,7 @@ const elIsHiddenByAncestors = function ($el, checkOpacity, $origEl = $el) {
     return true
   }
 
-  if ((elHasOverflowHidden($parent) || elHasOverflowClip($parent)) && !elHasDisplayContents($parent) && elHasNoEffectiveWidthOrHeight($parent)) {
+  if (elHasOverflowHidden($parent) && !elHasDisplayContents($parent) && elHasNoEffectiveWidthOrHeight($parent)) {
     // if any of the elements between the parent and origEl
     // have fixed or position absolute
     return !elDescendentsHavePositionFixedOrAbsolute($parent, $origEl)
@@ -417,8 +411,8 @@ const parentHasNoClientWidthOrHeightAndOverflowHidden = function ($el: JQuery<HT
     return false
   }
 
-  // if we have overflow hidden or clip and no effective width or height
-  if ((elHasOverflowHidden($el) || elHasOverflowClip($el)) && elHasNoEffectiveWidthOrHeight($el)) {
+  // if we have overflow hidden and no effective width or height
+  if (elHasOverflowHidden($el) && elHasNoEffectiveWidthOrHeight($el)) {
     return $el
   }
 
@@ -563,7 +557,7 @@ export const getReasonIsHidden = function ($el, options = { checkOpacity: true }
     let width = elClientWidth($parent)
     let height = elClientHeight($parent)
 
-    return `This element \`${node}\` is not visible because its parent \`${parentNode}\` has CSS property: \`overflow: hidden\` or \`overflow: clip\` and an effective width and height of: \`${width} x ${height}\` pixels.`
+    return `This element \`${node}\` is not visible because its parent \`${parentNode}\` has CSS property: \`overflow: hidden\` and an effective width and height of: \`${width} x ${height}\` pixels.`
   }
 
   // nested else --___________--
@@ -580,7 +574,7 @@ export const getReasonIsHidden = function ($el, options = { checkOpacity: true }
     }
   } else {
     if (elIsOutOfBoundsOfAncestorsOverflow($el)) {
-      return `This element \`${node}\` is not visible because its content is being clipped by one of its parent elements, which has a CSS property of overflow: \`hidden\`, \`scroll\` or \`auto\``
+      return `This element \`${node}\` is not visible because its content is being clipped by one of its parent elements, which has a CSS property of overflow: \`hidden\`, \`clip\`, \`scroll\` or \`auto\``
     }
   }
 
