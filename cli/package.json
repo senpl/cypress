@@ -20,7 +20,7 @@
     "unit": "cross-env BLUEBIRD_DEBUG=1 NODE_ENV=test mocha --reporter mocha-multi-reporters --reporter-options configFile=../mocha-reporter-config.json"
   },
   "dependencies": {
-    "@cypress/request": "^3.0.4",
+    "@cypress/request": "^3.0.6",
     "@cypress/xvfb": "^1.2.4",
     "@types/sinonjs__fake-timers": "8.1.1",
     "@types/sizzle": "^2.3.2",
@@ -31,6 +31,7 @@
     "cachedir": "^2.3.0",
     "chalk": "^4.1.0",
     "check-more-types": "^2.24.0",
+    "ci-info": "^4.0.0",
     "cli-cursor": "^3.1.0",
     "cli-table3": "~0.6.1",
     "commander": "^6.2.1",
@@ -45,7 +46,6 @@
     "figures": "^3.2.0",
     "fs-extra": "^9.1.0",
     "getos": "^3.2.1",
-    "is-ci": "^3.0.1",
     "is-installed-globally": "~0.4.0",
     "lazy-ass": "^1.6.0",
     "listr2": "^3.8.3",
@@ -68,15 +68,12 @@
     "@babel/cli": "7.24.8",
     "@babel/preset-env": "7.25.3",
     "@cypress/angular": "0.0.0-development",
-    "@cypress/angular-signals": "0.0.0-development",
     "@cypress/grep": "0.0.0-development",
     "@cypress/mount-utils": "0.0.0-development",
     "@cypress/react": "0.0.0-development",
-    "@cypress/react18": "0.0.0-development",
     "@cypress/sinon-chai": "2.9.1",
     "@cypress/svelte": "0.0.0-development",
     "@cypress/vue": "0.0.0-development",
-    "@cypress/vue2": "0.0.0-development",
     "@packages/root": "0.0.0-development",
     "@types/bluebird": "3.5.33",
     "@types/chai": "4.2.15",
@@ -116,11 +113,8 @@
     "mount-utils",
     "vue",
     "react",
-    "vue2",
-    "react18",
     "angular",
-    "svelte",
-    "angular-signals"
+    "svelte"
   ],
   "bin": {
     "cypress": "bin/cypress"
@@ -140,11 +134,6 @@
       "import": "./vue/dist/cypress-vue.esm-bundler.js",
       "require": "./vue/dist/cypress-vue.cjs.js"
     },
-    "./vue2": {
-      "types": "./vue2/dist/index.d.ts",
-      "import": "./vue2/dist/cypress-vue2.esm-bundler.js",
-      "require": "./vue2/dist/cypress-vue2.cjs.js"
-    },
     "./package.json": {
       "import": "./package.json",
       "require": "./package.json"
@@ -153,11 +142,6 @@
       "types": "./react/dist/index.d.ts",
       "import": "./react/dist/cypress-react.esm-bundler.js",
       "require": "./react/dist/cypress-react.cjs.js"
-    },
-    "./react18": {
-      "types": "./react18/dist/index.d.ts",
-      "import": "./react18/dist/cypress-react.esm-bundler.js",
-      "require": "./react18/dist/cypress-react.cjs.js"
     },
     "./mount-utils": {
       "types": "./mount-utils/dist/index.d.ts",
@@ -172,11 +156,6 @@
       "types": "./svelte/dist/index.d.ts",
       "import": "./svelte/dist/cypress-svelte.esm-bundler.js",
       "require": "./svelte/dist/cypress-svelte.cjs.js"
-    },
-    "./angular-signals": {
-      "types": "./angular-signals/dist/index.d.ts",
-      "import": "./angular-signals/dist/index.js",
-      "require": "./angular-signals/dist/index.js"
     }
   },
   "workspaces": {

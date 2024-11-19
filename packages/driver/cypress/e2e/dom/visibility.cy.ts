@@ -168,7 +168,7 @@ describe('src/cypress/dom/visibility', () => {
       }
 
       // ensure all tests run against a scrollable window
-      const scrollThisIntoView = add('<div style=`height: 1000px;` /><div>Should be in view</div>')
+      const scrollThisIntoView = add('<div style=`height: 1000px;`></div><div>Should be in view</div>')
 
       this.$visHidden = add('<ul style="visibility: hidden;"></ul>')
       this.$parentVisHidden = add('<div class="invis" style="visibility: hidden;"><button>parent visibility: hidden</button></div>')
@@ -382,7 +382,7 @@ describe('src/cypress/dom/visibility', () => {
 `)
 
       this.$elOutOfParentBoundsAbove = add(`\
-<div style='width: 100px; height: 100px; overflow: hidden; position: relative;'>
+<div style='width: 100px; height: 100px; overflow: hidden; position: fixed;'>
   <span id='elOutOfParentBoundsAbove' style='position: absolute; width: 100px; height: 100px; left: 0px; top: -100px;'>position: absolute, out of bounds above</span>
 </div>\
 `)
@@ -1200,10 +1200,7 @@ describe('src/cypress/dom/visibility', () => {
       })
 
       it('element is fixed and being covered', function () {
-        this.reasonIs(this.$coveredUpPosFixed.find('#coveredUpPosFixed'), `\
-This element \`<div#coveredUpPosFixed>\` is not visible because it has CSS property: \`position: fixed\` and it's being covered by another element:
-
-\`<div style="position: fixed; bottom: 0; left: 0">on top</div>\``)
+        this.reasonIs(this.$coveredUpPosFixed.find('#coveredUpPosFixed'), `\This element \`<div#coveredUpPosFixed>\` is not visible because it has CSS property: \`position: fixed\` and it's being covered by another element:\n\n\`<div style="position: fixed; bottom: 0; left: 0">on top</div>\``)
       })
 
       it('needs scroll', function () {
