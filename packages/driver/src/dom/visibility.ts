@@ -5,7 +5,7 @@ import $elements from './elements'
 import $coordinates from './coordinates'
 import * as $transform from './transform'
 
-const { isElement, isBody, isHTML, isOption, isOptgroup, getParent, getFirstParentWithTagName, isAncestor, isChild, getAllParents, isDescendent, isUndefinedOrHTMLBodyDoc, elOrAncestorIsFixedOrSticky, isDetached, isFocusable, stringify: stringifyElement } = $elements
+const { isElement, isSelect, isBody, isHTML, isOption, isOptgroup, getParent, getFirstParentWithTagName, isAncestor, isChild, getAllParents, isDescendent, isUndefinedOrHTMLBodyDoc, elOrAncestorIsFixedOrSticky, isDetached, isFocusable, stringify: stringifyElement } = $elements
 
 const fixedOrAbsoluteRe = /(fixed|absolute)/
 
@@ -59,7 +59,7 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
     // they may have not put the option into a select el,
     // in which case it will fall through to regular visibility logic
     if ($select && $select.length) {
-      // if the select is hidden, the options in it are visible too
+      // if the select is hidden, the options in it are hidden too
       return recurse ? recurse($select[0], methodName, options) : isStrictlyHidden($select[0], methodName, options)
     }
   }
@@ -229,6 +229,11 @@ const canClipContent = function ($el, $ancestor) {
 
   // fix for 29605 - display: contents
   if (elHasDisplayContents($ancestor)) {
+    return false
+  }
+
+  // can't clip if it's a select element
+  if (isSelect($ancestor[0])) {
     return false
   }
 
