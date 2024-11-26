@@ -2190,7 +2190,6 @@ describe('src/cy/commands/actions/click', () => {
 
         cy.click()
       })
-      // Array(1).fill().map(()=>
 
       it('throws when any member of the subject isnt visible', function (done) {
         // sometimes the command will timeout early with
@@ -2205,7 +2204,7 @@ describe('src/cy/commands/actions/click', () => {
 
           expect(logsArr).to.have.length(4)
           expect(lastLog.get('error')).to.eq(err)
-          expect(err.message).to.include('`cy.click()` failed because this element')
+          expect(err.message).to.include('`cy.click()` failed because this element is not visible')
 
           done()
         })
@@ -3344,7 +3343,7 @@ describe('src/cy/commands/actions/click', () => {
 
           expect(logs).to.have.length(4)
           expect(lastLog.get('error')).to.eq(err)
-          expect(err.message).to.include('`cy.dblclick()` failed because this element')
+          expect(err.message).to.include('`cy.dblclick()` failed because this element is not visible')
 
           done()
         })
@@ -3780,7 +3779,7 @@ describe('src/cy/commands/actions/click', () => {
 
           assertLogLength(this.logs, 4)
           expect(lastLog.get('error')).to.eq(err)
-          expect(err.message).to.include('`cy.rightclick()` failed because this element')
+          expect(err.message).to.include('`cy.rightclick()` failed because this element is not visible')
 
           done()
         })

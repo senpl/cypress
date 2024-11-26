@@ -161,12 +161,12 @@ describe('src/cypress/dom/visibility', () => {
     })
   })
 
+  const add = (el) => {
+    return $(el).appendTo(cy.$$('body'))
+  }
+
   context('hidden/visible overrides', () => {
     beforeEach(function () {
-      const add = (el) => {
-        return $(el).appendTo(cy.$$('body'))
-      }
-
       // ensure all tests run against a scrollable window
       const scrollThisIntoView = add('<div style=`height: 1000px;`></div><div>Should be in view</div>')
 
@@ -174,10 +174,8 @@ describe('src/cypress/dom/visibility', () => {
       this.$parentVisHidden = add('<div class="invis" style="visibility: hidden;"><button>parent visibility: hidden</button></div>')
       this.$displayNone = add('<button style="display: none">display: none</button>')
       this.$inputHidden = add('<input type="hidden" value="abcdef">')
-      this.$divNoWidth = add('<div id="divNoWidth" style="width: 0; height: 100px;"></div>')
-      this.$divNoHeight = add('<div id="divNoHeight" style="width: 50px; height: 0px;"></div>')
-      this.$divNoWidthTextContent = add('<div id="divNoWidthTestContent" style="width: 0; height: 100px;">width: 0</div>')
-      this.$divNoHeightTextContent = add('<div id="divNoHeightTestContent" style="width: 50px; height: 0px;">height: 0</div>')
+      this.$divNoWidth = add('<div style="width: 0; height: 100px;"></div>')
+      this.$divNoHeight = add('<div style="width: 50px; height: 0px;"></div>')
       this.$divDetached = $('<div>foo</div>')
       this.$divVisible = add(`<div>visible</div>`)
 
@@ -352,7 +350,7 @@ describe('src/cypress/dom/visibility', () => {
 
       this.$parentPointerEventsNone = add(`\
 <div style="pointer-events: none">
-  <span style="position: fixed; right: 0; top: 75%;">parent pointer-events: none</span>
+  <span style="position: fixed; left: 0; top: 50%;">parent pointer-events: none</span>
 </div>\
 `)
 
@@ -738,6 +736,8 @@ describe('src/cypress/dom/visibility', () => {
 
     describe('width and height', () => {
       it('is visible when el.textContent, even if offsetWidth is 0', function () {
+        this.$divNoWidthTextContent = add('<div style="width: 0; height: 100px;">width: 0</div>')
+
         expect(this.$divNoWidthTextContent.is(':hidden')).to.be.false
         expect(this.$divNoWidthTextContent.is(':visible')).to.be.true
 
@@ -749,6 +749,8 @@ describe('src/cypress/dom/visibility', () => {
       })
 
       it('is visible when el.textContent, even if offsetHeight is 0', function () {
+        this.$divNoHeightTextContent = add('<div style="width: 50px; height: 0px;">height: 0</div>')
+
         expect(this.$divNoHeightTextContent.is(':hidden')).to.be.false
         expect(this.$divNoHeightTextContent.is(':visible')).to.be.true
 
@@ -757,6 +759,19 @@ describe('src/cypress/dom/visibility', () => {
 
         cy.wrap(this.$divNoHeightTextContent).should('be.not.hidden')
         cy.wrap(this.$divNoHeightTextContent).should('be.visible')
+      })
+
+      it('is hidden when when el.textContent contains only whitespace and offsetWidth is 0', function () {
+        this.$divNoHeightBlankTextContent = add('<div style="width: 0px; height: 50px;">   \n   \t  </div>')
+
+        expect(this.$divNoHeightBlankTextContent.is(':hidden')).to.be.true
+        expect(this.$divNoHeightBlankTextContent.is(':visible')).to.be.false
+
+        expect(this.$divNoHeightBlankTextContent).to.be.hidden
+        expect(this.$divNoHeightBlankTextContent).to.not.be.visible
+
+        cy.wrap(this.$divNoHeightBlankTextContent).should('be.hidden')
+        cy.wrap(this.$divNoHeightBlankTextContent).should('not.be.visible')
       })
 
       it('is hidden when no el.textContent with offsetHeight is 0', function () {

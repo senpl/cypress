@@ -8,7 +8,6 @@ import * as $transform from './transform'
 const { isElement, isBody, isHTML, isOption, isOptgroup, getParent, getFirstParentWithTagName, isAncestor, isChild, getAllParents, isDescendent, isUndefinedOrHTMLBodyDoc, elOrAncestorIsFixedOrSticky, isDetached, isFocusable, stringify: stringifyElement } = $elements
 
 const fixedOrAbsoluteRe = /(fixed|absolute)/
-const whitespaceRegex = /\s/g
 
 const OVERFLOW_PROPS = ['hidden', 'scroll', 'auto']
 
@@ -31,57 +30,13 @@ const isHidden = (el, methodName = 'isHidden()', options = { checkOpacity: true 
   return isHiddenByAncestors(el, methodName, options)
 }
 
-const hasExplicitNonVisibleProps = ($el, options) => {
-  // additionally if the effective visibility of the element
-  // is hidden (which includes any parent nodes) then the user
-  // cannot interact with this element and thus it is hidden
-  if (elHasVisibilityHiddenOrCollapse($el)) {
-    return true // is hidden
-  }
-
-  // when an element is scaled to 0 in one axis
-  // it is not visible to users.
-  if ($transform.detectVisibility($el) !== 'visible') {
-    return true // is hidden
-  }
-
-  // a transparent element is hidden
-  if (elHasOpacityZero($el) && options.checkOpacity) {
-    return true // is hidden
-  }
-
-  return false
-}
-
-const isOptionHidden = (el, methodName, options, recurse) => {
-  const $el = $jquery.wrap(el)
-
-  // they could have just set to hide the option
-  if (elHasDisplayNone($el)) {
-    return true
-  }
-
-  // an option is considered visible if its parent select is visible
-  // if its parent select is visible, then it's not hidden
-  const $select = getFirstParentWithTagName($el, 'select')
-
-  // check $select.length here first
-  // they may have not put the option into a select el,
-  // in which case it will fall through to regular visibility logic
-  if ($select && $select.length && !isStrictlyHidden($select)) {
-    return false
-  }
-
-  return isStrictlyHidden($el, methodName, options)
-}
-
 const ensureEl = (el, methodName) => {
   if (!isElement(el)) {
     throw new Error(`\`Cypress.dom.${methodName}\` failed because it requires a DOM element. The subject received was: \`${el}\``)
   }
 }
 
-const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { checkOpacity: true }, recurse?) => {
+const isStrictlyHidden = (el: HTMLElement, methodName = 'isStrictlyHidden()', options = { checkOpacity: true }, recurse?) => {
   ensureEl(el, methodName)
   const $el = $jquery.wrap(el)
 
@@ -90,12 +45,23 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
     return false // is visible
   }
 
+  // an option is considered visible if its parent select is visible
   if (isOption(el) || isOptgroup(el)) {
-    return isOptionHidden(el, methodName, options, recurse)
-  }
+    // they could have just set to hide the option
+    if (elHasDisplayNone($el)) {
+      return true
+    }
 
-  if (elHasDisplayNone($el)) {
-    return true
+    // if its parent select is visible, then it's not hidden
+    const $select = getFirstParentWithTagName($el, 'select')
+
+    // check $select.length here first
+    // they may have not put the option into a select el,
+    // in which case it will fall through to regular visibility logic
+    if ($select && $select.length) {
+      // if the select is hidden, the options in it are visible too
+      return recurse ? recurse($select[0], methodName, options) : isStrictlyHidden($select[0], methodName, options)
+    }
   }
 
   // in Cypress-land we consider the element hidden if
@@ -107,18 +73,29 @@ const isStrictlyHidden = (el, methodName = 'isStrictlyHidden()', options = { che
       return !elHasVisibleChild($el)
     }
 
-    // the presence of text content that is not just
-    // spaces or newlines should make the element visible
-    // since you can see the text with your eyes
-    if (el.textContent?.replace(whitespaceRegex, '')) {
-      // unless it is explicitly hidden in some way
-      return hasExplicitNonVisibleProps($el, options)
-    }
+    return true // is hidden
+  }
 
+  // additionally if the effective visibility of the element
+  // is hidden (which includes any parent nodes) then the user
+  // cannot interact with this element and thus it is hidden
+  if (elHasVisibilityHiddenOrCollapse($el)) {
+    return true // is hidden
+  }
+
+  // when an element is scaled to 0 in one axis
+  // it is not visible to users.
+  // So, it is hidden.
+  if ($transform.detectVisibility($el) !== 'visible') {
     return true
   }
 
-  return hasExplicitNonVisibleProps($el, options)
+  // a transparent element is hidden
+  if (elHasOpacityZero($el) && options.checkOpacity) {
+    return true
+  }
+
+  return false
 }
 
 const isHiddenByAncestors = (el, methodName = 'isHiddenByAncestors()', options = { checkOpacity: true }) => {
@@ -140,7 +117,7 @@ const isHiddenByAncestors = (el, methodName = 'isHiddenByAncestors()', options =
   return elIsOutOfBoundsOfAncestorsOverflow($el)
 }
 
-const elHasNoEffectiveWidthOrHeight = ($el) => {
+const elHasNoEffectiveWidthOrHeight = ($el: JQuery) => {
   // Is the element's CSS width OR height, including any borders,
   // padding, and vertical scrollbars (if rendered) less than 0?
   //
@@ -163,10 +140,12 @@ const elHasNoEffectiveWidthOrHeight = ($el) => {
     transform = 'none'
   }
 
+  const hasTextContent = !!el.textContent?.trim().length
+
   const width = elClientWidth($el)
   const height = elClientHeight($el)
 
-  return isZeroLengthAndTransformNone(width, height, transform) ||
+  return (isZeroLengthAndTransformNone(width, height, transform) && !hasTextContent) ||
   isZeroLengthAndOverflowHidden(width, height, elHasOverflowHidden($el)) ||
   (el.getClientRects().length <= 0)
 }
@@ -176,21 +155,18 @@ const isZeroLengthAndTransformNone = (width, height, transform) => {
   // we learned that when an element has non-'none' transform style value like "translate(0, 0)",
   // it is visible even with `height: 0` or `width: 0`.
   // That's why we're checking `transform === 'none'` together with elClientWidth/Height.
-
-  return (width <= 0 && transform === 'none') ||
-  (height <= 0 && transform === 'none')
+  return (width <= 0 && transform === 'none') || (height <= 0 && transform === 'none')
 }
 
 const isZeroLengthAndOverflowHidden = (width, height, overflowHidden) => {
-  return (width <= 0 && overflowHidden) ||
-  (height <= 0 && overflowHidden)
+  return (width <= 0 && overflowHidden) || (height <= 0 && overflowHidden)
 }
 
 const elHasNoClientWidthOrHeight = ($el) => {
   return (elClientWidth($el) <= 0) || (elClientHeight($el) <= 0)
 }
 
-const elementBoundingRect = ($el) => $el[0].getBoundingClientRect()
+const elementBoundingRect = ($el: JQuery) => $el[0].getBoundingClientRect()
 
 const elClientHeight = ($el) => elementBoundingRect($el).height
 
