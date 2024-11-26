@@ -1221,11 +1221,11 @@ describe('src/cypress/dom/visibility', () => {
       })
 
       it('has effective zero width', function () {
-        this.reasonIs(this.$divNoWidth, 'This element `<div#divNoWidth>` is not visible because it has an effective width and height of: `0 x 100` pixels.')
+        this.reasonIs(this.$divNoWidth, 'This element `<div>` is not visible because it has an effective width and height of: `0 x 100` pixels.')
       })
 
       it('has effective zero height', function () {
-        this.reasonIs(this.$divNoHeight, 'This element `<div#divNoHeight>` is not visible because it has an effective width and height of: `50 x 0` pixels.')
+        this.reasonIs(this.$divNoHeight, 'This element `<div>` is not visible because it has an effective width and height of: `50 x 0` pixels.')
       })
 
       it('has a parent with an effective zero width and overflow: hidden', function () {
