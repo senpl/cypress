@@ -101,58 +101,9 @@ export function getBundler (bundler: WizardBundler['type']): WizardBundler {
 
 const mountModule = <T extends string>(mountModule: T) => (projectPath: string) => Promise.resolve(mountModule)
 
-const reactMountModule = async (projectPath: string) => {
-  const reactPkg = await isDependencyInstalled(dependencies.WIZARD_DEPENDENCY_REACT, projectPath)
-
-  if (!reactPkg.detectedVersion || !semver.valid(reactPkg.detectedVersion)) {
-    return 'cypress/react'
-  }
-
-  return semver.major(reactPkg.detectedVersion) === 18 ? 'cypress/react18' : 'cypress/react'
-}
-
 export const SUPPORT_STATUSES: Readonly<Cypress.ResolvedComponentFrameworkDefinition['supportStatus'][]> = ['alpha', 'beta', 'full', 'community'] as const
 
 export const CT_FRAMEWORKS: Cypress.ComponentFrameworkDefinition[] = [
-  {
-    type: 'reactscripts',
-    configFramework: 'create-react-app',
-    category: 'template',
-    name: 'Create React App',
-    supportedBundlers: ['webpack'],
-    detectors: [dependencies.WIZARD_DEPENDENCY_REACT_SCRIPTS],
-    dependencies: (bundler: WizardBundler['type']): Cypress.CypressComponentDependency[] => {
-      return [
-        dependencies.WIZARD_DEPENDENCY_REACT_SCRIPTS,
-        dependencies.WIZARD_DEPENDENCY_REACT_DOM,
-        dependencies.WIZARD_DEPENDENCY_REACT,
-      ]
-    },
-    codeGenFramework: 'react',
-    glob: '*.{js,jsx,tsx}',
-    mountModule: reactMountModule,
-    supportStatus: 'full',
-    componentIndexHtml: componentIndexHtmlGenerator(),
-  },
-  {
-    type: 'vueclivue3',
-    configFramework: 'vue-cli',
-    category: 'template',
-    name: 'Vue CLI (Vue 3)',
-    supportedBundlers: ['webpack'],
-    detectors: [dependencies.WIZARD_DEPENDENCY_VUE_CLI_SERVICE, dependencies.WIZARD_DEPENDENCY_VUE_3],
-    dependencies: (bundler: WizardBundler['type']): Cypress.CypressComponentDependency[] => {
-      return [
-        dependencies.WIZARD_DEPENDENCY_VUE_CLI_SERVICE,
-        dependencies.WIZARD_DEPENDENCY_VUE_3,
-      ]
-    },
-    codeGenFramework: 'vue',
-    glob: '*.vue',
-    mountModule: mountModule('cypress/vue'),
-    supportStatus: 'full',
-    componentIndexHtml: componentIndexHtmlGenerator(),
-  },
   {
     type: 'nextjs',
     category: 'template',
@@ -169,7 +120,7 @@ export const CT_FRAMEWORKS: Cypress.ComponentFrameworkDefinition[] = [
     },
     codeGenFramework: 'react',
     glob: '*.{js,jsx,tsx}',
-    mountModule: reactMountModule,
+    mountModule: mountModule('cypress/react'),
     supportStatus: 'full',
     /**
      * Next.js uses style-loader to inject CSS and requires this element to exist in the HTML.
@@ -215,7 +166,7 @@ export const CT_FRAMEWORKS: Cypress.ComponentFrameworkDefinition[] = [
     },
     codeGenFramework: 'react',
     glob: '*.{js,jsx,tsx}',
-    mountModule: reactMountModule,
+    mountModule: mountModule('cypress/react'),
     supportStatus: 'full',
     componentIndexHtml: componentIndexHtmlGenerator(),
   },

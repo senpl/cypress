@@ -75,20 +75,11 @@ export function fakeDepsInNodeModules (cwd: string, deps: Array<DepToFake | DevD
 const resolvedCtFrameworks = CT_FRAMEWORKS.map((x) => resolveComponentFrameworkDefinition(x))
 
 describe('detectFramework', () => {
-  it('Create React App v5', async () => {
-    const projectPath = await scaffoldMigrationProject('create-react-app-unconfigured')
-
-    fakeDepsInNodeModules(projectPath, [{ dependency: 'react-scripts', version: '5.0.0' }])
-    const actual = await detectFramework(projectPath, resolvedCtFrameworks)
-
-    expect(actual.framework?.type).to.eq('reactscripts')
-  })
-
   it('React App with webpack 5', async () => {
-    const projectPath = await scaffoldMigrationProject('react-app-webpack-5-unconfigured')
+    const projectPath = await scaffoldMigrationProject('react18-webpack-unconfigured')
 
     fakeDepsInNodeModules(projectPath, [
-      { dependency: 'react', version: '16.0.0' },
+      { dependency: 'react', version: '18.0.0' },
       { devDependency: 'webpack', version: '5.0.0' },
     ])
 
@@ -98,31 +89,17 @@ describe('detectFramework', () => {
     expect(actual.bundler).to.eq('webpack')
   })
 
-  it(`Vue CLI 5 w/ Vue 3`, async () => {
-    const projectPath = await scaffoldMigrationProject('vuecli5vue3-unconfigured')
+  it(`Webpack with Vue 3`, async () => {
+    const projectPath = await scaffoldMigrationProject('vue3-webpack-ts-configured')
 
     fakeDepsInNodeModules(projectPath, [
-      { devDependency: '@vue/cli-service', version: '5.0.0' },
+      { devDependency: 'webpack', version: '5.0.0' },
       { dependency: 'vue', version: '3.2.0' },
     ])
 
     const actual = await detectFramework(projectPath, resolvedCtFrameworks)
 
-    expect(actual.framework?.type).to.eq('vueclivue3')
-    expect(actual.bundler).to.eq('webpack')
-  })
-
-  it(`Vue CLI w/ Vue 3`, async () => {
-    const projectPath = await scaffoldMigrationProject('vueclivue3-unconfigured')
-
-    fakeDepsInNodeModules(projectPath, [
-      { devDependency: '@vue/cli-service', version: '5.0.0' },
-      { dependency: 'vue', version: '3.2.0' },
-    ])
-
-    const actual = await detectFramework(projectPath, resolvedCtFrameworks)
-
-    expect(actual.framework?.type).to.eq('vueclivue3')
+    expect(actual.framework?.type).to.eq('vue3')
     expect(actual.bundler).to.eq('webpack')
   })
 
@@ -154,13 +131,12 @@ describe('detectFramework', () => {
     expect(actual.bundler).to.eq('vite')
   })
 
-  // keeping array style as to make it easier to support future next versions
-  ;['14.0.0'].forEach((v) => {
+  ;['14.0.0', '15.0.0'].forEach((v) => {
     it(`Next.js v${v}`, async () => {
       const projectPath = await scaffoldMigrationProject('nextjs-unconfigured')
 
       fakeDepsInNodeModules(projectPath, [
-        { dependency: 'react', version: '18.0.0' },
+        { dependency: 'react', version: v === '15.0.0' ? '19.0.0-rc.1' : '18.0.0' },
         { dependency: 'next', version: v },
       ])
 
@@ -171,7 +147,7 @@ describe('detectFramework', () => {
     })
   })
 
-  ;['13.0.0', '14.0.0'].forEach((v) => {
+  ;['17.2.0', '18.2.0'].forEach((v) => {
     it(`Angular CLI v${v}`, async () => {
       const projectPath = await scaffoldMigrationProject('angular-cli-unconfigured')
 
@@ -191,7 +167,7 @@ describe('detectFramework', () => {
       const projectPath = await scaffoldMigrationProject('svelte-vite-unconfigured')
 
       fakeDepsInNodeModules(projectPath, [
-        { dependency: 'svelte', version: '3.0.0' },
+        { dependency: 'svelte', version: '4.0.0' },
         { dependency: 'vite', version: v },
       ])
 
@@ -206,7 +182,7 @@ describe('detectFramework', () => {
     const projectPath = await scaffoldMigrationProject('svelte-webpack-unconfigured')
 
     fakeDepsInNodeModules(projectPath, [
-      { dependency: 'svelte', version: '3.0.0' },
+      { dependency: 'svelte', version: '4.0.0' },
       { dependency: 'webpack', version: '5.0.0' },
     ])
 

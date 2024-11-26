@@ -15,51 +15,36 @@ describe('packagesToInstall', () => {
     removeCommonNodeModules()
   })
 
-  it('create-react-app-unconfigured', async () => {
+  it('regular react project with webpack', async () => {
     const ctx = createTestDataContext()
-    const projectPath = await scaffoldMigrationProject('create-react-app-unconfigured')
+
+    const projectPath = await scaffoldMigrationProject('react18-webpack-unconfigured')
 
     ctx.update((coreData) => {
       coreData.currentProject = projectPath
-      coreData.wizard.chosenFramework = findFramework('reactscripts')
+      coreData.wizard.chosenFramework = findFramework('react')
       coreData.wizard.chosenBundler = findBundler('webpack')
     })
 
     const actual = await ctx.wizard.installDependenciesCommand()
 
-    expect(actual).to.eq(`npm install -D react-scripts react-dom react`)
+    expect(actual).to.eq(`npm install -D webpack react react-dom`)
   })
 
-  it('vueclivue3-unconfigured', async () => {
+  it('regular vue project with webpack', async () => {
     const ctx = createTestDataContext()
 
-    const projectPath = await scaffoldMigrationProject('vueclivue3-unconfigured')
+    const projectPath = await scaffoldMigrationProject('vue3-webpack-ts-unconfigured')
 
     ctx.update((coreData) => {
       coreData.currentProject = projectPath
-      coreData.wizard.chosenFramework = findFramework('vueclivue3')
+      coreData.wizard.chosenFramework = findFramework('vue3')
       coreData.wizard.chosenBundler = findBundler('webpack')
     })
 
     const actual = await ctx.wizard.installDependenciesCommand()
 
-    expect(actual).to.eq(`npm install -D @vue/cli-service vue`)
-  })
-
-  it('vuecli5vue3-unconfigured', async () => {
-    const ctx = createTestDataContext()
-
-    const projectPath = await scaffoldMigrationProject('vuecli5vue3-unconfigured')
-
-    ctx.update((coreData) => {
-      coreData.currentProject = projectPath
-      coreData.wizard.chosenFramework = findFramework('vueclivue3')
-      coreData.wizard.chosenBundler = findBundler('webpack')
-    })
-
-    const actual = await ctx.wizard.installDependenciesCommand()
-
-    expect(actual).to.eq(`npm install -D @vue/cli-service vue`)
+    expect(actual).to.eq(`npm install -D webpack vue`)
   })
 
   it('regular react project with vite', async () => {

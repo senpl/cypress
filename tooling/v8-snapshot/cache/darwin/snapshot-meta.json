@@ -80,7 +80,6 @@
   ],
   "deferred": [
     "./node_modules/@ampproject/remapping/dist/remapping.umd.js",
-    "./node_modules/@ampproject/remapping/node_modules/@jridgewell/gen-mapping/dist/gen-mapping.umd.js",
     "./node_modules/@babel/code-frame/lib/index.js",
     "./node_modules/@babel/core/lib/config/config-chain.js",
     "./node_modules/@babel/core/lib/config/config-descriptors.js",
@@ -1048,6 +1047,8 @@
     "./node_modules/@cypress/commit-info/src/index.js",
     "./node_modules/@cypress/commit-info/src/utils.js",
     "./node_modules/@cypress/get-windows-proxy/node_modules/debug/src/common.js",
+    "./node_modules/@cypress/get-windows-proxy/node_modules/registry-js/dist/lib/index.js",
+    "./node_modules/@cypress/get-windows-proxy/node_modules/registry-js/dist/lib/registry.js",
     "./node_modules/@cypress/get-windows-proxy/src/index.js",
     "./node_modules/@cypress/parse-domain/build/tries/icann.complete.json",
     "./node_modules/@cypress/parse-domain/build/tries/private.complete.json",
@@ -3167,6 +3168,8 @@
     "./node_modules/recast/parsers/babel.js",
     "./node_modules/recast/parsers/esprima.js",
     "./node_modules/recast/parsers/typescript.js",
+    "./node_modules/registry-js/dist/lib/index.js",
+    "./node_modules/registry-js/dist/lib/registry.js",
     "./node_modules/request-promise-core/configure/request2.js",
     "./node_modules/request-promise-core/errors.js",
     "./node_modules/request-promise-core/lib/errors.js",
@@ -3587,6 +3590,7 @@
     "./packages/config/src/project/utils.ts",
     "./packages/config/src/utils.ts",
     "./packages/config/src/validation.ts",
+    "./packages/data-context/node_modules/@babel/code-frame/lib/index.js",
     "./packages/data-context/node_modules/ast-types/def/babel-core.js",
     "./packages/data-context/node_modules/ast-types/def/babel.js",
     "./packages/data-context/node_modules/ast-types/def/core-operators.js",
@@ -4179,5 +4183,5 @@
     "./tooling/v8-snapshot/cache/darwin/snapshot-entry.js"
   ],
   "deferredHashFile": "yarn.lock",
-  "deferredHash": "b2a41a7f5e2fec9ac646948bc8f60bef53e6d80c2880d18332a5f3c3803cb55c"
+  "deferredHash": "3c653b6a14e1665197f3d25d7a31c27730ee46ad044393071b1def6e87aae87f"
 }
