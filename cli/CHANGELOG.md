@@ -30,14 +30,13 @@ in this [GitHub issue](https://github.com/cypress-io/cypress/issues/30447). Addr
 
 - Elements with `display: contents` will no longer use box model calculations for visibility, and correctly show as visible when it is visible. Fixed in [#29680](https://github.com/cypress-io/cypress/pull/29680). Fixes [#29605](https://github.com/cypress-io/cypress/issues/29605).
 - The CSS pseudo-class `:dir()` is now supported when testing in Electron. Addresses [#29766](https://github.com/cypress-io/cypress/issues/29766).
-- Fixed an issue where "isVisible" is incorrectly assessed for the absolutely positioned elements if the ancestor has overflow and static position. Fixed in [#29689](https://github.com/cypress-io/cypress/pull/29689).
+- Fixed a visibility issue for an absolutely positioned elements if the ancestor has overflow and static position. Fixed in [#29689](https://github.com/cypress-io/cypress/pull/29689). Fixes [#28638](https://github.com/cypress-io/cypress/issues/28638)
 
 **Dependency Updates:**
 
 - Upgraded `electron` from `27.3.10` to `32.2.0`. Addresses [#29547](https://github.com/cypress-io/cypress/issues/29547).
 - Upgraded bundled Chromium version from `118.0.5993.159` to `128.0.6613.178`. Addresses [#29547](https://github.com/cypress-io/cypress/issues/29547).
 - Updated `jQuery` from `3.4.1` to `3.7.1`. Addressed in [#30345](https://github.com/cypress-io/cypress/pull/30345).
-
 
 ## 13.15.2
 
@@ -50,8 +49,6 @@ _Released 11/5/2024 (PENDING)_
 **Dependency Updates:**
 
 - Updated `@cypress/request` from `3.0.4` to `3.0.6`. Addressed in [#30488](https://github.com/cypress-io/cypress/pull/30488).
-
-
 
 ## 13.15.1
 

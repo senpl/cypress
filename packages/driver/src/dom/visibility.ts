@@ -177,10 +177,6 @@ const elHasVisibilityHiddenOrCollapse = ($el) => {
   return elHasVisibilityHidden($el) || elHasVisibilityCollapse($el)
 }
 
-const elHasVisibilityVisible = ($el) => {
-  return $el.css('visibility') === 'visible'
-}
-
 const elHasVisibilityHidden = ($el) => {
   return $el.css('visibility') === 'hidden'
 }
@@ -211,11 +207,15 @@ const elHasOverflowHidden = function ($el) {
   return cssOverflow.includes('hidden')
 }
 
-const elHasPositionRelative = ($el) => {
+const elHasPositionRelative = ($el: JQuery<HTMLElement>) => {
   return $el.css('position') === 'relative'
 }
 
-const elHasPositionAbsolute = ($el) => {
+const elHasPositionStatic = ($el: JQuery<HTMLElement>) => {
+  return $el.css('position') == null || $el.css('position') === 'static'
+}
+
+const elHasPositionAbsolute = ($el: JQuery<HTMLElement>) => {
   return $el.css('position') === 'absolute'
 }
 
@@ -225,37 +225,41 @@ const elHasClippableOverflow = function ($el) {
             OVERFLOW_PROPS.includes($el.css('overflow-x'))
 }
 
-const canClipContent = function ($el, $ancestor) {
+const canClipContent = function ($el: JQuery<HTMLElement>, $ancestor: JQuery<HTMLElement>) {
   // can't clip without overflow properties
   if (!elHasClippableOverflow($ancestor)) {
     return false
   }
 
-  // fix for 29605 - display: contents
   if (elHasDisplayContents($ancestor)) {
     return false
   }
 
   // the closest parent with position relative, absolute, or fixed
   const $offsetParent = $el.offsetParent()
-  const isClosestAncsestor = isAncestor($ancestor, $offsetParent)
-
-  // fix for 28638 - when element postion is relative and it's parent absolute
-  if (elHasPositionRelative($el) && isClosestAncsestor && elHasPositionAbsolute($ancestor)) {
-    return false
-  }
 
   // even if ancestors' overflow is clippable, if the element's offset parent
   // is a parent of the ancestor, the ancestor will not clip the element
   // unless the element is position relative
-  if (!elHasPositionRelative($el) && isClosestAncsestor) {
+  if (!elHasPositionRelative($el) && isAncestor($ancestor, $offsetParent)) {
     return false
   }
 
   // even if ancestors' overflow is clippable, if the element's offset parent
   // is a child of the ancestor, the ancestor will not clip the element
-  // unless the ancestor has position absolute
+  // unless the ancestor has a position that is not absolute
   if (elHasPositionAbsolute($offsetParent) && isChild($ancestor, $offsetParent)) {
+    return false
+  }
+
+  // even if ancestors' overflow is clippable, if the element's offset parent
+  // is a child of the ancestor, the ancestor will not clip the element
+  // unless the ancestor has a position that is not absolute
+  if ((elHasPositionStatic($el) || elHasPositionRelative($el))
+    && elHasPositionAbsolute($offsetParent)
+    && isDescendent($ancestor, $offsetParent)
+    && !elHasClippableOverflow($offsetParent)
+  ) {
     return false
   }
 
@@ -272,8 +276,7 @@ export const isW3CFocusable = (el) => {
   return isFocusable(wrap(el)) && isW3CRendered(el)
 }
 
-// @ts-ignore
-const elAtCenterPoint = function ($el) {
+const elAtCenterPoint = function ($el: JQuery<HTMLElement>) {
   const doc = $document.getDocumentFromElement($el.get(0))
   const elProps = $coordinates.getElementPositioning($el)
 
@@ -284,6 +287,8 @@ const elAtCenterPoint = function ($el) {
   if (el) {
     return $jquery.wrap(el)
   }
+
+  return undefined
 }
 
 const elDescendentsHavePositionFixedOrAbsolute = function ($parent, $child) {
@@ -304,7 +309,7 @@ const elHasVisibleChild = function ($el) {
   })
 }
 
-const elIsNotElementFromPoint = function ($el) {
+const elIsNotElementFromPoint = function ($el: JQuery<HTMLElement>) {
   // if we have a fixed position element that means
   // it is fixed 'relative' to the viewport which means
   // it MUST be available with elementFromPoint because
@@ -339,10 +344,6 @@ const elIsOutOfBoundsOfAncestorsOverflow = function ($el: JQuery<any>, $ancestor
     return false
   }
 
-  if (elHasPositionRelative($el) && elHasPositionAbsolute($ancestor)) {
-     return false
-  }
-  // fix for 29605 - display: contents
   if (elHasDisplayContents($el)) {
     return false
   }
@@ -409,19 +410,13 @@ const elIsHiddenByAncestors = function ($el, checkOpacity, $origEl = $el) {
   }
 
   if (elHasOverflowHidden($parent) && !elHasDisplayContents($parent) && elHasNoEffectiveWidthOrHeight($parent)) {
-    // if any of the elements between the parent and origEl
-    // have fixed or position absolute
+    // if any of the elements between the parent and origEl have fixed or position absolute
     return !elDescendentsHavePositionFixedOrAbsolute($parent, $origEl)
-  }
-
-  if (elHasVisibilityVisible($parent)) {
-    return false
   }
 
   // continue to recursively walk up the chain until we reach body or html
   return elIsHiddenByAncestors($parent, checkOpacity, $origEl)
 }
-
 
 const parentHasNoClientWidthOrHeightAndOverflowHidden = function ($el: JQuery<HTMLElement>) {
   // if we've walked all the way up to body or html then return false
@@ -578,7 +573,6 @@ export const getReasonIsHidden = function ($el, options = { checkOpacity: true }
     return `This element \`${node}\` is not visible because its parent \`${parentNode}\` has CSS property: \`overflow: hidden\` and an effective width and height of: \`${width} x ${height}\` pixels.`
   }
 
-  // nested else --___________--
   if (elOrAncestorIsFixedOrSticky($el)) {
     if (elIsNotElementFromPoint($el)) {
       // show the long element here
