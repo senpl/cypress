@@ -45,8 +45,8 @@ in this [GitHub issue](https://github.com/cypress-io/cypress/issues/30447). Addr
 **Bugfixes:**
 
 - Elements with `display: contents` will no longer use box model calculations for visibility, and correctly show as visible when it is visible. Fixed in [#29680](https://github.com/cypress-io/cypress/pull/29680). Fixes [#29605](https://github.com/cypress-io/cypress/issues/29605).
-- Fixed an issue where parent width 0 signal element hidden when it's visible. Fixed in [#29688](https://github.com/cypress-io/cypress/pull/29688). Fixes [#29687](https://github.com/cypress-io/cypress/issues/29687).
 - The CSS pseudo-class `:dir()` is now supported when testing in Electron. Addresses [#29766](https://github.com/cypress-io/cypress/issues/29766).
+- Fixed a visibility issue for elements with `textContent` but without a width or height. Fixed in [#29688](https://github.com/cypress-io/cypress/pull/29688). Fixes [#29687](https://github.com/cypress-io/cypress/issues/29687).
 
 **Dependency Updates:**
 
