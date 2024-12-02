@@ -46,7 +46,7 @@ in this [GitHub issue](https://github.com/cypress-io/cypress/issues/30447). Addr
 
 - Elements with `display: contents` will no longer use box model calculations for visibility, and correctly show as visible when it is visible. Fixed in [#29680](https://github.com/cypress-io/cypress/pull/29680). Fixes [#29605](https://github.com/cypress-io/cypress/issues/29605).
 - The CSS pseudo-class `:dir()` is now supported when testing in Electron. Addresses [#29766](https://github.com/cypress-io/cypress/issues/29766).
-- Fixed a visibility issue for absolutely positioned elements if the ancestor has overflow and static position. Fixed in [#29689](https://github.com/cypress-io/cypress/pull/29689). Fixes [#28638](https://github.com/cypress-io/cypress/issues/28638).
+- Fixed a visibility issue when the element is positioned `static` or `relative` and the element's offset parent is positioned `absolute`, a descendent of the ancestor, and has no clippable overflow. Fixed in [#29689](https://github.com/cypress-io/cypress/pull/29689). Fixes [#28638](https://github.com/cypress-io/cypress/issues/28638).
 - Fixed a visibility issue for elements with `textContent` but without a width or height. Fixed in [#29688](https://github.com/cypress-io/cypress/pull/29688). Fixes [#29687](https://github.com/cypress-io/cypress/issues/29687).
 - Elements whose parent elements has `overflow: clip` and no height/width will now correctly show as hidden. Fixed in [#29778](https://github.com/cypress-io/cypress/pull/29778). Fixes [#23852](https://github.com/cypress-io/cypress/issues/23852).
 
